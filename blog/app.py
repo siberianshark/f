@@ -8,6 +8,7 @@ from blog.models import User
 from blog.views.auth import login_manager, auth_app
 import os
 from flask_migrate import Migrate
+from blog.security import flask_bcrypt
 
 
 app = Flask(__name__)
@@ -15,6 +16,9 @@ app = Flask(__name__)
 
 migrate = Migrate()
 migrate.init_app(app, db)
+
+
+flask_bcrypt.init_app(app)
 
 
 @app.route("/")
@@ -36,3 +40,17 @@ app.config.from_object(f"blog.configs.{cfg_name}")
 # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 login_manager.init_app(app)
 db.init_app(app)
+
+
+@app.cli.command("create-admin")
+def create_admin():
+    """
+    Run in your terminal:
+    ➜ flask create-admin
+    > created admin: <User #1 'admin'>
+    """
+    admin = User(username="Admin", email="Admin@Admin.com", is_staff=True)
+    admin.password = os.environ.get("ADMIN_PASSWORD") or "adminpass"
+    db.session.add(admin)
+    db.session.commit()
+    print("created admin:", admin)

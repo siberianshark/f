@@ -14,7 +14,7 @@ Register
 {# csrf protection #}
 {{ form.csrf_token() }}
 {# show inputs #}
-{% for field in ['username', 'password'] %}
+{% for field in ['username', 'fullname', 'email', 'password', 'confirm'] %}
 {{ render_field(form[field]) }}
 {% endfor %}
 {# submit #}
