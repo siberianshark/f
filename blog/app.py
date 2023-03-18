@@ -9,6 +9,8 @@ from blog.views.auth import login_manager, auth_app
 import os
 from flask_migrate import Migrate
 from blog.security import flask_bcrypt
+from blog.views.authors import authors_app
+
 
 
 app = Flask(__name__)
@@ -28,6 +30,8 @@ def index():
 
 app.register_blueprint(users_app, url_prefix="/users")
 app.register_blueprint(articles_app, url_prefix='/articles')
+app.register_blueprint(authors_app, url_prefix="/authors")
+
 # app.config["SECRET_KEY"] = "abcdefg123456"
 app.register_blueprint(auth_app, url_prefix="/auth")
 
