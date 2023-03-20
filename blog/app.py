@@ -11,7 +11,7 @@ from flask_migrate import Migrate
 from blog.security import flask_bcrypt
 from blog.views.authors import authors_app
 from blog.admin import admin
-
+from blog.api import init_api
 
 
 app = Flask(__name__)
@@ -46,7 +46,7 @@ app.config.from_object(f"blog.configs.{cfg_name}")
 login_manager.init_app(app)
 db.init_app(app)
 admin.init_app(app)
-
+api = init_api(app)
 
 
 @app.cli.command("create-admin")
