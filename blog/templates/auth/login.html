@@ -4,6 +4,12 @@
 Register
 {% endblock %}
 {% block body %}
+{% extends 'base.html' %}
+{% from "macro/formhelpers.html" import render_field %}
+{% block title %}
+Register
+{% endblock %}
+{% block body %}
 <h1>Register</h1>
 {% if error %}
 <div class="alert alert-danger">

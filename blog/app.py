@@ -13,9 +13,12 @@ from blog.api import init_api
 from flask_wtf import CSRFProtect
 
 csrf = CSRFProtect()
+
 app = Flask(__name__)
+
 migrate = Migrate()
 migrate.init_app(app, db)
+
 flask_bcrypt.init_app(app)
 
 @app.route("/")

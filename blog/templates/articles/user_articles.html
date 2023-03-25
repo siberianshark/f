@@ -11,7 +11,8 @@
     {% endfor %}
     </ul>
     <hr>
-    <a href="{{ url_for('users_app.profile', user_id=current_user.id) }}">Back to profile</a>
-    <a href="{{ url_for('users_app.list') }}">Back to articles</a>
+    <a href="{{ url_for('users_app.profile', user_id=current_user.id) }}">My profile</a>
+    <br>
+    <a href="{{ url_for('users_app.list') }}">User list</a>
     </div>
 {% endblock %}

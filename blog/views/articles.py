@@ -1,32 +1,34 @@
-from flask import Blueprint, render_template
-from flask import Blueprint, render_template, request, current_app, redirect, url_for
+from flask import Blueprint, render_template, request, current_app, redirect, url_for, abort
 from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import NotFound
 from blog.models.database import db
-from blog.models import Author, Article
+from blog.models import Author, Article, Tag
 from blog.forms.article import CreateArticleForm
-
+from sqlalchemy.orm import joinedload
 
 articles_app = Blueprint('articles_app', __name__)
-
-ARTICLES = ["Flask", "Django", "JSON:API"]
-
 
 @articles_app.route('/', endpoint='list')
 def articles_list():
     articles = Article.query.all()
-    return render_template('articles/list.html', articles=ARTICLES)
+    return render_template('articles/list.html', articles=articles)
+
+@articles_app.route('/<int:author_id>/articles/', endpoint="author_articles")
+def show_author_articles(author_id):
+    author = Author.query.get(author_id)
+    if author is None:
+        abort(404)
+    articles = Article.query.filter_by(author_id=author_id).all()
+    return render_template('authors/author_articles.html', author=author, articles=articles)
 
 @articles_app.route("/<int:article_id>/", endpoint="details")
 def article_detals(article_id):
-        article = Article.query.filter_by(id=article_id).options(
-            joinedload(Article.tags) 
-            ).one_or_none()
-
-        if article is None:
-            raise NotFound
-        return render_template("articles/details.html", article=article)
+    article = Article.query.filter_by(id=article_id).options(
+        joinedload(Article.tags)).one_or_none()
+    if article is None:
+        raise NotFound
+    return render_template("articles/details.html", article=article)
 
 @articles_app.route("/create/", methods=["GET", "POST"], endpoint="create")
 @login_required
@@ -58,4 +60,5 @@ def create_article():
             error = "Could not create article!"
         else:
             return redirect(url_for("articles_app.details", article_id=article.id))
+
     return render_template("articles/create.html", form=form, error=error)

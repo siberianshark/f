@@ -2,14 +2,12 @@ from blog.app import app
 from blog.models import User
 from blog.models.database import db
 
-
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         debug=True,
     )
-
-
+    
 # @app.cli.command("init-db")
 # def init_db():
 #     """
@@ -18,7 +16,6 @@ if __name__ == "__main__":
 #     """
 #     db.create_all()
 #     print("done!")
-
 
 # @app.cli.command("create-users")
 # def create_users():

@@ -4,10 +4,17 @@
 {% endblock %}
 {% block body %}
     <h1>{{ user.username }}</h1>
+    <img src="{{ user.avatar(128) }}"/>
     {% if user.is_staff %}<span class="badge bg-secondary">staff</span>
-{% endif %}
+    {% endif %}
+
+    
     <div>
-        <a href="{{ url_for('users_app.list') }}">Back to users list</a>
+        <a href="{{ url_for('users_app.list') }}">To users list</a>
+        <br>
+        {% if user.author %}
+        <a href="{{ url_for('users_app.user_articles', author_id=user.author.id) }}">{{user.username}} articles</a>
+        {% endif %}
     </div>
         
 {% endblock %}
