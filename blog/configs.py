@@ -1,6 +1,4 @@
 import os
-
-
 class BaseConfig(object):
     DEBUG = False
     TESTING = False
@@ -13,17 +11,11 @@ class BaseConfig(object):
     OPENAPI_VERSION = '3.0.0'
     OPENAPI_SWAGGER_UI_PATH = '/'
     OPENAPI_SWAGGER_UI_VERSION = '3.51.1'
-
-
 class DevConfig(BaseConfig):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")
-
-
 class TestingConfig(BaseConfig):
     TESTING = True
-
-
 class ProductionConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")
     SECRET_KEY = os.environ.get("SECRET_KEY")
