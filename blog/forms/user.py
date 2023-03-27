@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, validators, PasswordField, SubmitField
 from flask_wtf.file import FileField, FileAllowed
+
+
 class UserBaseForm(FlaskForm):
     fullname = StringField("Fullname")
     username = StringField(
@@ -16,6 +18,8 @@ class UserBaseForm(FlaskForm):
         ],
         filters=[lambda data: data and data.lower()],
     )
+
+
 class RegistrationForm(UserBaseForm):
     password = PasswordField(
         "New Password",
@@ -28,6 +32,8 @@ class RegistrationForm(UserBaseForm):
     #                         FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')])
     confirm = PasswordField("Repeat Password")
     submit = SubmitField("Register")
+
+
 class LoginForm(FlaskForm):
     username = StringField(
         "username",

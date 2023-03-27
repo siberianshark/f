@@ -1,7 +1,5 @@
 from combojsonapi.utils import Relationship
 from marshmallow_jsonapi import Schema, fields
-
-
 class ArticleSchema(Schema):
     class Meta:
         type_ = "article"

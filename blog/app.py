@@ -11,32 +11,39 @@ from blog.security import flask_bcrypt
 from blog.views.authors import authors_app
 from blog.api import init_api
 from flask_wtf import CSRFProtect
-
 csrf = CSRFProtect()
 
+
 app = Flask(__name__)
+
 
 migrate = Migrate()
 migrate.init_app(app, db)
 
+
 flask_bcrypt.init_app(app)
+
 
 @app.route("/")
 def index():
     return render_template('index.html')
+
 
 app.register_blueprint(users_app, url_prefix="/users")
 app.register_blueprint(articles_app, url_prefix="/articles")
 app.register_blueprint(authors_app, url_prefix="/authors")
 app.register_blueprint(auth_app, url_prefix="/auth")
 
+
 cfg_name = os.environ.get("CONFIG_NAME") or "BaseConfig"
 app.config.from_object(f"blog.configs.{cfg_name}")
+
 
 login_manager.init_app(app)
 db.init_app(app)
 admin.init_app(app)
 api = init_api(app)
+
 
 @app.cli.command("create-admin")
 def create_admin():
@@ -50,6 +57,7 @@ def create_admin():
     db.session.add(admin)
     db.session.commit()
     print("created admin:", admin)
+
 
 @app.cli.command("create-tags")
 def create_tags():

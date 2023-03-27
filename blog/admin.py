@@ -1,3 +1,4 @@
+from blog.models.database import db
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from blog import models
@@ -5,6 +6,8 @@ from blog.models.database import db
 from flask import redirect, url_for
 from flask_login import current_user
 from flask_admin import Admin, AdminIndexView, expose
+
+
 class MyAdminIndexView(AdminIndexView):
     @expose("/")
     def index(self):
@@ -12,8 +15,11 @@ class MyAdminIndexView(AdminIndexView):
             return redirect(url_for("auth_app.login"))
         return super(MyAdminIndexView, self).index()
 
+
 admin = Admin(name="Blog Admin", index_view=MyAdminIndexView(),
               template_mode="bootstrap4")
+
+
 class CustomView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.is_staff
@@ -21,7 +27,10 @@ class CustomView(ModelView):
     def inaccessible_callback(self, name, **kwargs):
         return redirect(url_for("auth_app.login"))
 
+
 admin.add_view(CustomView(models.Article, db.session, category="Models"))
+
+
 class TagAdminView(CustomView):
     column_searchable_list = ("name",)
     column_filters = ("name",)
@@ -30,7 +39,10 @@ class TagAdminView(CustomView):
     create_modal = True
     edit_modal = True
 
+
 admin.add_view(TagAdminView(models.Tag, db.session, category="Models"))
+
+
 class UserAdminView(CustomView):
     column_exclude_list = ("_password",)
     column_searchable_list = (
@@ -41,5 +53,6 @@ class UserAdminView(CustomView):
     can_create = True
     can_edit = True
     can_delete = False
+
 
 admin.add_view(UserAdminView(models.User, db.session, category="Models"))

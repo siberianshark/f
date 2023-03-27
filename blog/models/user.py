@@ -3,8 +3,7 @@ from blog.models.database import db
 from flask_login import UserMixin
 from blog.security import flask_bcrypt
 from sqlalchemy.orm import relationship
-
-
+from hashlib import md5
 class User(db.Model, UserMixin):
     id = Column(Integer, primary_key=True)
     username = Column(String(80), nullable=False)
@@ -15,7 +14,6 @@ class User(db.Model, UserMixin):
     is_staff = Column(Boolean, nullable=False, default=False)
     _password = Column(LargeBinary, nullable=True)
     author = relationship("Author", uselist=False, back_populates="user")
-
 
     def __repr__(self):
         return f"<User #{self.id} {self.username!r}>"
@@ -30,3 +28,8 @@ class User(db.Model, UserMixin):
 
     def validate_password(self, password) -> bool:
         return flask_bcrypt.check_password_hash(self._password, password)
+
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
+            digest, size)
